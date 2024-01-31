@@ -5,12 +5,15 @@ import Image from 'next/image'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
+import toast, { Toaster } from "react-hot-toast";
+
 
 export default function LoginPage() { 
   
   const { data: session, status } = useSession();
   const [login, setLogin] = useState({email: "",
   password: "" });
+  const [loginMsg, setLoginMsg] = useState("");
   const router = useRouter();
   useEffect(()=>{
     
@@ -24,14 +27,25 @@ export default function LoginPage() {
     // console.log("login: ", login);
     let user = await signIn("credentials", {
       ...login,
-      redirect: false
+      redirect: false,
+      
     });
+    if(user.error)
+    setLoginMsg(()=>user.error)
+  else
+  toast.success("Logging User in...")
     // alert(JSON.stringify(user))
     console.log("userInfo: ", user)
   }
 
+  
+
   return (
     <div className="p-4 h-[calc(100vh-6rem)] md:h-[calc(100vh-9rem)] flex items-center justify-center">
+       <Toaster
+        position="top-center"
+        reverseOrder={true}
+        />
     <div className=" h-full shadow-2xl rounded-md flex flex-col md:flex-row md:h-[70%] md:w-full lg:w-[60%] 2xl:w-1/2">
     <div className='relative h-1/3 w-full md:h-full md:w-1/2'>
         <Image
@@ -82,8 +96,9 @@ export default function LoginPage() {
        >
         Login
       </button>
-    {/*  */}
-      <div className="text-center">
+      <br />
+{      !!loginMsg &&  <span>{loginMsg}</span>
+}      <div className="text-center">
     <Link href={"/register"} className="inline-block align-baseline font-medium text-sm text-blue-500 hover:text-blue-800">
       Click here to register.
     </Link>

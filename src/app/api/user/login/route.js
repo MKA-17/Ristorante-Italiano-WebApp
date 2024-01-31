@@ -19,7 +19,7 @@ export const POST = async (req) => {
             },
           });
           
-          console.log("userData inside authorize: ", user)
+          // console.log("userData inside authorize: ", user)
 
           if (!user) {
             console.log("user not found")
@@ -36,6 +36,14 @@ export const POST = async (req) => {
             return NextResponse.json(
               { message: "User account not verified. Verify your account via the mail we sent you on your email.", success: false, },
               { status: 401 }
+            ); //or redirect to some page
+           }
+
+           if(!user.password){
+            console.log("user has already logged in with the account via google sign in")
+            return NextResponse.json(
+              { message: "User has already logged in with this account via google sign in.", success: false, },
+              { status: 200 }
             ); //or redirect to some page
            }
 

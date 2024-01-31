@@ -2,6 +2,7 @@ import { prisma } from "@/utils/dbConnect"
 import { getServerSession } from "next-auth"
 import { NextResponse } from "next/server"
 import { getAuthSession } from "../auth/[...nextauth]/options";
+import { v4 as uuidv4 } from 'uuid';
 
 export const GET = async(req)=>{
 
@@ -41,7 +42,8 @@ export const GET = async(req)=>{
     //     )
         let order = await prisma.order.create({
             data: {
-              ...orderData
+              ...orderData, 
+              intentId: uuidv4()
             }
           })
       return  NextResponse.json({message: "Created the Order", 

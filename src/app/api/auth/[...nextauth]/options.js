@@ -30,26 +30,30 @@ export const options = {
         async authorize(credentials, req) {
           // Add logic here to look up the user from the credentials supplied
           // console.log("credentials received : ", credentials, `${process.env.Domain_Name}/api/user/login`)
-          let resp = await fetch(`${process.env.Domain_Name}/api/user/login`, {
-            method: "POST",
-            headers:{
-              "content-Type": "application/json" 
-            },
-            body: JSON.stringify(credentials),
-
-          });
-          if(resp.ok){
+          try{
+            
+            let resp = await fetch(`${process.env.Domain_Name}/api/user/login`, {
+              method: "POST",
+              headers:{
+                "content-Type": "application/json" 
+              },
+              body: JSON.stringify(credentials),
+              
+            });
+            // console.log("resp: ", await resp.json())
             let user = await resp.json();   
-            // console.log("userFetch: ", user)
-            if(user.success === true)
+            
+               if(user.success === true)
               return user.user
+            
             else 
-              return null
+              throw  new Error( user.message  )
+
           }
-          else
-            return null
+          catch(e){ 
+            throw  new Error( e  )
         }
-      })
+      }})
   ],
 
   secret: process.env.TOKEN_SECRET,
