@@ -10,7 +10,7 @@ const fetchProducts = async () => {
     });
 
     if (!response.ok) {
-      console.log("Failed to fetch products", response);
+      return  "Failed to fetch products";
     }
 
     const data = await response.json();
@@ -32,10 +32,12 @@ export default async function FeaturedItems() {
     <div className="flex flex-row w-screen  overflow-x-scroll ">
       <div className="w-max flex">
         {
-          productsList?.products?.length &&
+          productsList?.products ?
           productsList.products.map(e=>
             <ItemCard key={e.id} {...e}/>
             )
+            :
+            (productsList)
         }
          
       </div>

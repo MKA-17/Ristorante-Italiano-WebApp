@@ -14,7 +14,7 @@ const fetchCategories = async () => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch categories");
+      return "Failed to fetch categories";
     }
 
     const data = await response.json();
@@ -24,7 +24,7 @@ const fetchCategories = async () => {
     return data;  
   } catch (error) {
     console.error("Error fetching categories:", error.message);
-    throw error;
+    return error;
   }
 };
 
@@ -34,9 +34,13 @@ export default async function MenuPage() {
   return (
     <div className='flex  flex-wrap justify-center items-center p-10 overflow-y-scroll'>
       {
-        categoriesList.categories.map(e=>
+        categoriesList?.categories ?
+
+        categoriesList.categories?.map(e=>
           <MenuCard {...e} key={e.id}/>
           )
+          :
+          categoriesList
       }
       
     </div>

@@ -23,7 +23,7 @@ const fetchProducts = async (cat) => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch products");
+      return "Failed to fetch products";
     }
 
     const data = await response.json();
@@ -32,7 +32,7 @@ const fetchProducts = async (cat) => {
     return data; 
   } catch (error) {
     console.error("Error fetching products:", error.message);
-    throw error;
+    return error;
   }
 };
 
@@ -49,9 +49,12 @@ export default async function CategoryPage({ params }) {
     <div className="flex  flex-wrap md:justify-center items-center md:p-5 ">
 
       {
+        productsList?.products?
           productsList.products.map(e=>
             <ItemCard key={e.id} {...e}/>
             )
+            :
+            productsList
         }
     </div>
     </>  

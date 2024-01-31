@@ -15,7 +15,7 @@ const fetchProduct = async (productId) => {
     );
 
     if (!response.ok) {
-      throw new Error("Failed to fetch products");
+      return "Failed to fetch products";
     }
 
     const data = await response.json();
@@ -23,7 +23,7 @@ const fetchProduct = async (productId) => {
     return data;
   } catch (error) {
     console.error("Error fetching products:", error.message);
-    throw error;
+    return  error;
   }
 };
 
@@ -38,8 +38,8 @@ export async function generateMetadata(
   // optionally access and extend (rather than replace) parent metadata
   
   return {
-    title: `${product.title}`,
-    description: `${product.title}`,
+    title: `${product?.title||"product"}`,
+    description: `${product?.title||'product'}`,
   
   }
 }
@@ -53,7 +53,9 @@ export default async function ProductPage({ params: { productId } }) {
 
   return (
     <>
-      {!!product?.id && (
+
+      {
+      !!product?.id && (
         <>
           {!!session?.user?.isAdmin && <DeleteButton productId={productId} />}
           <div className="flex flex-col md:flex-row justify-center items-center m-10">
